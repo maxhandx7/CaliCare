@@ -24,12 +24,28 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
+            'password' => bcrypt('password'), // Password común para pruebas
+            'role' => $this->faker->randomElement(['client', 'caregiver']),
+            'is_verified' => $this->faker->boolean(70), // 70% de probabilidad de estar verificado
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
         ];
+    }
+
+    // States para roles específicos
+    public function client()
+    {
+        return $this->state(['role' => 'client']);
+    }
+
+    public function caregiver()
+    {
+        return $this->state([
+            'role' => 'caregiver',
+            'is_verified' => true, // Cuidadores siempre verificados
+        ]);
     }
 
     /**

@@ -17,7 +17,11 @@ class ReviewFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'booking_id' => \App\Models\Booking::factory(),
+            'client_id' => \App\Models\User::factory()->client(),
+            'caregiver_id' => \App\Models\User::factory()->caregiver(),
+            'rating' => $this->faker->numberBetween(1, 5),
+            'comment' => $this->faker->boolean(70) ? $this->faker->sentence() : null,
         ];
     }
 }

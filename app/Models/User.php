@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'image',
+        'role',
+        'is_verified',
     ];
 
     /**
@@ -42,4 +45,37 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    //Relaciones
+
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
+
+    public function bookingsAsClient()
+    {
+        return $this->hasMany(Booking::class, 'client_id');
+    }
+
+    public function bookingsAsCaregiver()
+    {
+        return $this->hasMany(Booking::class, 'caregiver_id');
+    }
+
+    public function reviewsAsClient()
+    {
+        return $this->hasMany(Review::class, 'client_id');
+    }
+
+    public function reviewsAsCaregiver()
+    {
+        return $this->hasMany(Review::class, 'caregiver_id');
+    }
+
+    public function isCaregiver(): bool
+    {
+        return $this->role === 'caregiver';
+    }
+
 }
